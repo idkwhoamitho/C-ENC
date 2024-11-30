@@ -15,25 +15,26 @@ struct State{
 };
 
 
-unsigned char* OTPAlgorithm (char key[], unsigned char* buffer,size_t keySize, size_t bufferSize){
+unsigned char* OTPAlgorithm (char key[], unsigned char* buffer,int keySize, int bufferSize){
     int i = 0;
     int j = 0;
     do
     {
-        if(j + 1 > (int)keySize) j = 0;
+        if(j + 1 > keySize) j = 0;
         buffer[i] ^= key[j];
         i++;
         j++;
-    }while(i < (int)bufferSize);
+    }while(i < bufferSize);
     return buffer;
 };
 
 void encryptFile(char filePath[], char fileOutput[], char key[]){
-    unsigned char* buffer = readFileBuffer(filePath);
+    size_t fileSize;
+    char* buffer = (char*)readFileBuffer(filePath,&fileSize);
     size_t keysSize = strlen(key);
-    size_t bufferSize = sizeof(buffer) / sizeof(unsigned char*);
+    //size_t bufferSize =strlen((char*)buffer);
 
-    unsigned char* enc = OTPAlgorithm(key,buffer,keysSize,bufferSize);
+    unsigned char* enc = OTPAlgorithm(key,(unsigned char*)buffer,keysSize,(int)fileSize);
     writeFile((char*)enc,fileOutput,"wb");    
 
 };

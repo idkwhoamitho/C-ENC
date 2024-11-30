@@ -16,23 +16,43 @@ void writeFile(char contents[], char fileName[],const char* modes){
     printf("Writed succesfully\n\n");
 }
 
-
-
-unsigned char* readFileBuffer (char filePath[]){
+char* readFile(char filePath[]){
     FILE *fin = fopen(filePath,"rb");
     if(!fin) perror("File is not found");
-    fseek(fin,0,SEEK_END);
-    size_t file_size = ftell(fin);
-    rewind(fin);
+    
+    fseek(fin, 0, SEEK_END);
+    long fileSize = ftell(fin);
+    fseek(fin,0,SEEK_SET);
 
-    unsigned char* buffer = (unsigned char* )malloc(file_size);
-    if(!buffer) perror("Memory allocation failed");
-    fread(buffer, 1,file_size, fin);
+    char* content = (char*)malloc(fileSize + 1);
+    if(!content) perror("Memory allocation in readFile has failed");
+
+    fread(content,1,fileSize,fin);
+    content[fileSize] = '\0';
+
     fclose(fin);
+    return content;
+}
 
+
+
+
+char* readFileBuffer (char filePath[],size_t* fileSize){
+    FILE *fin = fopen(filePath,"rb");
+    if(!fin) perror("File is not found");
+    
+    fseek(fin, 0, SEEK_END);
+    *fileSize = ftell(fin);
+    fseek(fin,0,SEEK_SET);
+
+    char* buffer = (char*)malloc(*fileSize);
+    if(!buffer) perror("Memory allocation failed");
+
+    fread(buffer,1,*fileSize,fin);
+    fclose(fin);
     return buffer;
 
-    free (buffer);
+
 }
 
 #endif

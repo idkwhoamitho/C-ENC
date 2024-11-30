@@ -4,6 +4,7 @@
 #include <time.h>
 #include "fileIO.h"
 #include "encrypt.h"
+#include <sys/types.h>
 
 
 void generateKey(){
@@ -23,17 +24,32 @@ void generateKey(){
     printf("key: %s\n",key);
     printf("proccessing and saving key to key.txt  \n");
     writeFile(key,"./key","w");
-    printf("\nWARNING: DO NOT LOSE YOUR KEY OR YOUR FILE CAN'T BE DECRYPTED");
+    printf("\nWARNING: DO NOT LOSE YOUR KEY OR YOUR FILE CAN'T BE DECRYPTED  \n\n");
 }
 void encrypt(){
     char keyFile[6] = "";
+    char plaintext[100];
+
     printf("Please input your key file: ");
     scanf("%s",keyFile);
-    unsigned char* key = readFileBuffer(keyFile);
-    printf("%s",key);
-
+    char* key = readFile(keyFile);
+    printf("Please input your file (txt): ");
+    scanf("%s",plaintext);
+    encryptFile(plaintext,"./Encrypted",(char*)key);
+    free(key);
 }
+void decrypt(){
+    char keyFile[6] = "";
+    char plaintext[100];
 
+    printf("Please input your key file: ");
+    scanf("%s",keyFile);
+    char* key = readFile(keyFile);
+    printf("Please input your cipher (txt): ");
+    scanf("%s",plaintext);
+    encryptFile(plaintext,"./plaint",(char*)key);\
+    free(key);
+}
 void allMenu()
 {
     int choose;
@@ -49,5 +65,7 @@ void allMenu()
         if(choose == 4) break;
         if(choose == 1) generateKey();
         if(choose == 2) encrypt();
+        if(choose == 3) decrypt();
+
     }
 }
