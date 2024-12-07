@@ -10,8 +10,9 @@
 void generateKey(){
     int len;
     srand(time(0));
-    printf("please choose your key length: ");
+    printf("please choose your key length(0 to exit): ");
     scanf("%d",&len);
+    if(len == 0) return;
     char key[len];
     for(int i = 0;i < len;i++){
         if(i % 2 == 0){
@@ -30,11 +31,13 @@ void encrypt(){
     char keyFile[6] = "";
     char plaintext[100];
 
-    printf("Please input your key file: ");
+    printf("Please input your key file(0 to exit): ");
     scanf("%s",keyFile);
+	if (strcmp(keyFile, "0") == 0) return;
     char* key = readFile(keyFile);
-    printf("Please input your file (txt): ");
+    printf("Please input your file (txt)(0 to exit): ");
     scanf("%s",plaintext);
+	if (strcmp(plaintext, "0") == 0) return;
     encryptFile(plaintext,"./Encrypted",(char*)key);
     free(key);
 }
@@ -42,19 +45,24 @@ void decrypt(){
     char keyFile[6] = "";
     char plaintext[100];
 
-    printf("Please input your key file: ");
+    printf("Please input your key file(0 to exit): ");
     scanf("%s",keyFile);
+	if (strcmp(keyFile, "0") == 0) return;
     char* key = readFile(keyFile);
-    printf("Please input your cipher (txt): ");
+    printf("Please input your cipher (txt)(0 to exit): ");
     scanf("%s",plaintext);
-    encryptFile(plaintext,"./plaint",(char*)key);\
+	if (strcmp(plaintext, "0") == 0) return;
+    encryptFile(plaintext,"./plaint",(char*)key);
     free(key);
 }
 void allMenu()
 {
     int choose;
+	printf("\n*************************\n");
+    printf("**WELCOME TO KEY EDITOR**");
     while(1){
-        printf("Main Menu ");
+        printf("\n*************************");
+        printf("\n	Main Menu	\n");
         printf("\n1. Generate key");
         printf("\n2. Encrypt file");
         printf("\n3. Decrypt file");
